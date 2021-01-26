@@ -22,8 +22,8 @@ st.header('Enter DNA sequence')
 sequence_input = ">DNA Query 2\nGAACACGTGGAGGCAAACAGGAAGGTGAAGAAGAACTTATCCTATCAGGACGGAAGGTCCTGTGCTCGGG\nATCTTCCAGACGTCGCGACTCTAAATTGCCCCCTCTGAGGTCAAGGAACACAAGATGGTTTTGGAAATGC\nTGAACCCGATACATTATAACATCACCAGCATCGTGCCTGAAGCCATGCCTGCTGCCACCATGCCAGTCCT"
 sequence = st.text_area("Sequence input", sequence_input, height=250)
 sequence = sequence.splitlines()
-sequence
 sequence = sequence[1:] # skips the first line (sequence name)
+# sequence
 sequence = ''.join(sequence) #Concats list into string
 
 st.write("""
@@ -47,4 +47,16 @@ def DNA_nucleotide_count(seq):
         ('C', seq.count('C')),
     ])
     return d
+X = DNA_nucleotide_count(sequence)
 
+X_label = list(X)
+X_values = list(X.values())
+
+X
+
+# Human readable text
+st.subheader('2. Print text')
+st.write('There are ' + str(X['A']) +' adenine (A)')
+st.write('There are ' + str(X['T']) +' thymine (T)')
+st.write('There are ' + str(X['G']) +' guanine (G)')
+st.write('There are ' + str(X['C']) +' cytosine (C)')
