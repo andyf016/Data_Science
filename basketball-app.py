@@ -20,14 +20,18 @@ selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950, 2020))))
 @st.cache
 def load_data(year):
     url = 'https://www.basketball-refrence.com/leagues/NBA_' + str(year) + "_per_game.html"
-    html = pd.read_html(url, header = 0)
-    df = html[0]
+    html = pd.read_html(url, header = 0) # Preform Web Scraping
+    df = html[0]    
     raw = df.drop(df[df.Age == 'Age'].index) # Deletes repeating age
     raw = raw.fillna(0)
-    playerstats = raw.drop(['Rk'], axis=1)
+    playerstats = raw.drop(['Rk'], axis=1) # delete index column 
     return playerstats
 playerstats = load_data(selected_year)
 
-#sidebar team selection
-sorted_unique_team = sorted(playerstats.Tm.unique())
+# Sidebar team selection
+sorted_unique_team = sorted(playerstats.Tm.unique()) 
 selectd_team = st.sidebar.multiselect('Team', sorted_unique_team)
+
+# Sidebar position selection
+unique_pos = ['C', 'PF', 'SF', 'PG', 'SG']
+selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
