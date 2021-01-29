@@ -17,7 +17,7 @@ st.sidebar.header('User Input Features')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950, 2020))))
 
 #web scraping of NBA players stats
-@st.cache
+@st.cache # cache data to prevent reloading
 def load_data(year):
     url = 'https://www.basketball-refrence.com/leagues/NBA_' + str(year) + "_per_game.html"
     html = pd.read_html(url, header = 0) # Preform Web Scraping
@@ -30,15 +30,16 @@ playerstats = load_data(selected_year)
 
 # Sidebar team selection
 sorted_unique_team = sorted(playerstats.Tm.unique()) 
-selectd_team = st.sidebar.multiselect('Team', sorted_unique_team)
+selectd_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)
 
 # Sidebar position selection
 unique_pos = ['C', 'PF', 'SF', 'PG', 'SG']
 selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 # Filtering Data
-df_selected_team = playerstats[(playerstats.TM.isin(selectd_team)) & (playerstats)] ##
+df_selected_team = playerstats[(playerstats.TM.isin(selectd_team)) & (playerstats.POS.isin(selected_pos))] ##
 
 st.header('Display Player Stats of Selected Team(s)')
-st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str()) ##
+st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1] +)) ##
 st.dataframe(df_selected_team)
+
