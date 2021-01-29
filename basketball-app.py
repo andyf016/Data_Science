@@ -37,10 +37,10 @@ unique_pos = ['C', 'PF', 'SF', 'PG', 'SG']
 selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 # Filtering Data
-df_selected_team = playerstats[(playerstats.TM.isin(selectd_team)) & (playerstats.POS.isin(selected_pos))] ##
+df_selected_team = playerstats[(playerstats.TM.isin(selectd_team)) & (playerstats.POS.isin(selected_pos))] 
 
 st.header('Display Player Stats of Selected Team(s)')
-st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1] +)) ##
+st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1] + ' columns'))
 st.dataframe(df_selected_team)
 
 # Download NBA player stats data
@@ -49,3 +49,16 @@ def filedownload(df):
     b64 = base64.b64encode(csv.encode()).decode # strings to bytes conversions
     href = f'<a href="data:file/csv;base64,{b64}" download="playerstats.csv">Download CSV File</a>'
     return href
+
+st.markdown(filedownload(df_selected_team), unsafe_allow_html=True)
+
+
+# Heatmap
+if st.button('Intercorrelation Heatmap'):
+    st.header('Intercorrelation Matric Heatmap')
+    df_selected_team.to_csv('output.csv', index=False)
+    df = pd.read_csv('output.csv')
+
+    corr = df.corr()
+    mask = np.zeroes_like(corr)
+    mask[np.triu_indicies_from(mask)] = True
